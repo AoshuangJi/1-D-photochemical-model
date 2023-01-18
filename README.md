@@ -2,7 +2,7 @@
 This 1-D photochemical model is the latest version from Kasting group for the model intercomparison project.
 This version is directly from Liu et al. (2021): http://www.pnas.org/lookup/doi/10.1073/pnas.2105074118 and updated by the author.
 
-=== INSTRUCTIONS TO RUN THE PHOTOCHEMICAL MODEL ==
+=== INSTRUCTIONS TO RUN THE PHOTOCHEMICAL MODEL ===
 
 0. INDEX
     1. Directory contents
@@ -70,7 +70,7 @@ grep STRING ../*
 
 5. CONVERGENCE CRITERIA
 
- This code can be tricky when checking convergence. It will stop once it
+This code can be tricky when checking convergence. It will stop once it
 converges but it can stop for other reasons. Check carefully the file:
 atm_chem.out_explained.pdf
 For low O2 environments (less than 0.21 O2) the photochemical model may need
@@ -128,5 +128,5 @@ Its contents and the convergence criteria are explained in the file:
 profiles to be used by the climate model.
 * IO/OUTPUT_PLOT.dat - Some specific outputs for plotting in the model intercomparison paper
 
-Aoshuang Ji
-Created: January, 2023
+First Created by Antigona Segura in August, 2006
+Updated by Aoshuang Ji in January, 2023
