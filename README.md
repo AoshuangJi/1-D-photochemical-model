@@ -24,6 +24,7 @@ makefile - make file to compile the model. Contains commands for linux and f90 c
 * The most important subdirectories in the directory CHEM are:
 dochem.f - program related to all the chemistry and is to calculate the loss and production rate for species
 photo.f - program to calculate photolysis rates for species at different wavelength ranges
+* All the necessary data to run the model are in the directory DATA
 
 2. COMPILING THE MODEL
 IMPORTANT: Some options in the make files are system dependent. Find
