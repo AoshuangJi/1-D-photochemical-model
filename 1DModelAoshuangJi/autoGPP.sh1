@@ -1,0 +1,101 @@
+#!/bin/bash
+#!/bin/awk
+#set echo
+#set verbose
+
+
+#############
+# WROTE BY PENG LIU AT JUL/2019 IN PENN STATE
+# THIS SCRIPT CAN HELP YOU FIND THE APPROPRIATE GPP FOR BOTH O2 AND CO2
+#                 RUN WIDE RANGES MIXING RATIO FOR BOTH O2 AND CO2
+#
+#############
+
+t1=100
+depo2=0.0001
+FL=$(grep "FLOW(O2)=" ./IO/outchem.dat)
+ND=$(grep "SL(O2)="   ./IO/outchem.dat)
+FLU=${FL//FLOW(O2)=}
+NDS=${ND//SL(O2)=}
+vdep=$(echo "scale=7;$FLU / $NDS"|bc) #calculate vdep according to the output
+
+
+
+if [ $(echo "$vdep < $depo2"|bc) -eq 1 ] 
+then
+echo 'Saving files'
+else
+
+NGPP=$(echo "scale=4;$NDS * $depo2 / 1"|bc)   #calculate modest GPP
+i=1
+while [ $i -le ${t1} ];do
+GPP_1=$(grep "GPP=" ./IO/input_atmchem.dat)
+GPP_2=${GPP_1//GPP=}
+GPP_3=${GPP_2//!Gross primary productivity (1.1e14 cm-2s-1)}
+GPP_ORI="GPP="$GPP_3
+
+NGPPG=$(echo "scale=4;$NGPP * (1.0 + (($i - 1.0) * 0.01)) / 1"|bc) #increase GPP by 1%
+
+
+NGPP_1=$(echo $NGPPG |awk '{printf("%.2e\n",$0)}')  #change to scientific notation 
+NGPP_2=${NGPP_1//+}
+
+NGPP_CODE[i]="GPP=       "$NGPP_2"      "
+echo "${NGPP_CODE[i]}" 
+echo "${GPP_ORI}"
+sed -i "s/${GPP_ORI}/${NGPP_CODE[i]}/g" ./IO/input_atmchem.dat
+
+#run case
+./runchem > isotope.dat
+
+# check the new output
+FLX=$(grep "FLOW(O2)=" ./IO/outchem.dat)
+NDX=$(grep "SL(O2)="   ./IO/outchem.dat)
+FLUX=${FLX//FLOW(O2)=}
+NDSX=${NDX//SL(O2)=}
+vdepX=$(echo "scale=7;$FLUX / $NDSX"|bc) #calculate UPDATED vdep according to the output
+
+if [ $(echo "$vdepX < $depo2"|bc) -eq 1 ] 
+then
+echo 'keep finding'
+else  # the right GPP is ${NGPP_CODE[i-1]}
+sed -i "s/${NGPP_CODE[i]}/${NGPP_CODE[i-1]}/g" ./IO/input_atmchem.dat
+#run case
+./runchem > isotope.dat
+echo 'YOU GOT THE RIGHT GPP!!!'
+#save fils
+break
+fi
+
+
+  i=$((i+1))
+done
+
+
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
