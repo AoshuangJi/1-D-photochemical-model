@@ -35,13 +35,15 @@ make -f makefile
 The executable file 'runchem' will be created
 
 3. TO RUN THE PROGRAM
-Choose the parameters you want to use inthe file IO/input_atmchem.dat
+Choose the parameters you want to use in the file IO/input_atmchem.dat
 Choose the boundary conditions LBOUND in atm_chem.f (see 6.1)
 Choose the mixing ratios you want to use in IO/mixing_ratios.dat
 Type: ./runchem
 
 IMPORTANT: Before running the programs be sure that you have selected all the correct inputs.
 Read the following sections to find out where the relevant files are stored.
+
+In the file IO/input_atmchem.dat, you can see there is 'CLFLAG' which can be changed for standard chlorine flux (0) or low chlorine flux (1).
 
 Once you ran the model for the first time you can use the last solution as the start of a new run by:
 cp IO/mixing_ratios.out IO/mixing_ratios.dat
